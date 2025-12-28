@@ -8,26 +8,34 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Mail, MapPin, Phone, Send, Github, Linkedin, Globe } from "lucide-react"
+import { Mail, MapPin, Phone, Send, Github, Linkedin, Globe, CheckCircle2 } from "lucide-react"
+import { toast } from "sonner"
 
 export function ContactSection() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSent, setIsSent] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Aquí iría la lógica para enviar el formulario
-    console.log("Formulario enviado:", formData)
-  }
+    setIsSubmitting(true)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    // Simulación de envío
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      console.log("Formulario enviado:", formData)
+      setIsSent(true)
+      toast.success("¡Mensaje enviado con éxito!")
+      setFormData({ name: "", email: "", message: "" })
+    } catch (error) {
+      toast.error("Hubo un error al enviar el mensaje. Inténtalo de nuevo.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

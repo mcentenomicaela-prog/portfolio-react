@@ -1,5 +1,8 @@
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card"
 import { Code, Database, Globe, Zap } from "lucide-react"
+import { motion } from "framer-motion"
 
 export function AboutSection() {
   const skills = [
@@ -33,13 +36,22 @@ export function AboutSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 max-w-5xl mx-auto justify-items-center">
           {skills.map((skill, index) => (
-            <Card key={index} className="w-full text-center hover:shadow-lg transition-shadow duration-300">
-              <CardContent className="p-6">
-                <skill.icon className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2">{skill.title}</h3>
-                <p className="text-muted-foreground text-sm">{skill.description}</p>
-              </CardContent>
-            </Card>
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="w-full"
+            >
+              <Card className="w-full text-center hover:shadow-lg transition-shadow duration-300 h-full">
+                <CardContent className="p-6">
+                  <skill.icon className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="font-semibold text-lg mb-2">{skill.title}</h3>
+                  <p className="text-muted-foreground text-sm">{skill.description}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
 
