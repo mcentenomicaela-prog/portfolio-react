@@ -1,7 +1,6 @@
 "use client"
 
 import { Download, Mail, Phone, Github, Globe, Linkedin, ArrowLeft } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -9,37 +8,8 @@ import { Button } from "@/components/ui/button"
 export default function Curriculum() {
   const router = useRouter()
 
-  // Forzar tema claro al imprimir (si está en modo oscuro lo quita temporalmente)
-  useEffect(() => {
-    const root = document.documentElement
-    const before = () => {
-      if (root.classList.contains('dark')) {
-        root.dataset._wasDark = '1'
-        root.classList.remove('dark')
-      }
-    }
-    const after = () => {
-      if (root.dataset._wasDark === '1') {
-        root.classList.add('dark')
-        delete root.dataset._wasDark
-      }
-    }
-    window.addEventListener('beforeprint', before)
-    window.addEventListener('afterprint', after)
-    return () => {
-      window.removeEventListener('beforeprint', before)
-      window.removeEventListener('afterprint', after)
-    }
-  }, [])
-
   const handlePrint = () => {
-    const root = document.documentElement
-    const wasDark = root.classList.contains('dark')
-    if (wasDark) root.classList.remove('dark')
-    setTimeout(() => {
-      window.print()
-      if (wasDark) root.classList.add('dark')
-    }, 30)
+    window.print()
   }
 
   return (
@@ -51,16 +21,15 @@ export default function Curriculum() {
             {/* Bloque Izquierdo con Avatar + Datos */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-6">
               <div className="relative mx-auto sm:mx-0 print:h-28 print:w-28">
-                <div className="relative h-32 w-32 print:h-28 print:w-28 rounded-full overflow-hidden border border-emerald-500/40 shadow shadow-emerald-500/10 print:border-gray-400 print:shadow-none">
+                <div className="relative h-32 w-32 print:h-28 print:w-28 overflow-hidden print:shadow-none">
                   <figure className="photo">
-                    <img 
-                      src="/profile.jpg" 
-                      alt="Foto de perfil de Mario Gabriel Avendaño" 
+                    <img
+                      src="/fotoperfil.png"
+                      alt="Foto de perfil de Mario Gabriel Avendaño"
+                      className="w-full h-full object-cover"
                     />
                   </figure>
                 </div>
-                {/* Glow suave sólo en pantalla, no en print */}
-                <span aria-hidden className="hidden print:hidden sm:block absolute -inset-1 rounded-full bg-emerald-400/20 blur-xl" />
               </div>
               <div>
                 <h1 className="text-4xl font-mono font-bold mb-2 dark:text-white print:mb-1">Mario Gabriel Avendaño</h1>
@@ -74,18 +43,6 @@ export default function Curriculum() {
                     <Phone className="h-4 w-4 text-primary print:text-black" />
                     <a href="tel:+543516503188" className="hover:underline">+54 351 650 3188</a>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Github className="h-4 w-4 text-primary print:text-black" />
-                    <a href="https://github.com/mgaDesarrollo" target="_blank" rel="noopener noreferrer" className="hover:underline">github.com/mgaDesarrollo</a>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Linkedin className="h-4 w-4 text-primary print:text-black" />
-                    <a href="https://www.linkedin.com/in/gabriel-avendaño-4334a02a5" target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn / Perfil</a>
-                  </div>
-                  <div className="flex items-center gap-2 sm:col-span-2">
-                    <Globe className="h-4 w-4 text-primary print:text-black" />
-                    <a href="https://portfolio-react-3pol.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:underline">Portfolio Web</a>
-                  </div>
                 </div>
               </div>
             </div>
@@ -97,11 +54,10 @@ export default function Curriculum() {
               <Button onClick={handlePrint} variant="secondary" size="sm">
                 <Download className="w-4 h-4 mr-2" /> PDF
               </Button>
-              <ThemeToggle />
             </div>
           </div>
         </div>
-        
+
         {/* Perfil Profesional */}
         <section className="p-8">
           <h3 className="text-2xl font-mono font-bold mb-4 border-b-2 pb-2 dark:text-white">Perfil Profesional</h3>
@@ -115,7 +71,7 @@ export default function Curriculum() {
         {/* Experiencia Laboral */}
         <section className="p-8">
           <h3 className="text-2xl font-mono font-bold mb-4 border-b-2 pb-2 dark:text-white">Experiencia Laboral</h3>
-          
+
           <div className="mb-6">
             <h4 className="text-lg font-semibold dark:text-white">Desarrollador de Software | SingularityNET</h4>
             <span className="text-sm opacity-80">mayo de 2025 - actualidad</span>
@@ -184,34 +140,24 @@ export default function Curriculum() {
           </div>
         </section>
 
-        {/* Habilidades Técnicas */}
+        {/* Tecnologías */}
         <section className="p-8">
-          <h3 className="text-2xl font-mono font-bold mb-4 border-b-2 pb-2 dark:text-white">Habilidades Técnicas</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold mb-3">Frontend</h4>
-              <div className="flex flex-wrap gap-2">
-                {['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'HTML5', 'CSS3'].map(skill => (
-                  <span key={skill} className="px-3 py-1 bg-gray-200 dark:bg-gray-800 rounded-full text-sm font-mono dark:text-white">{skill}</span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3">Backend</h4>
-              <div className="flex flex-wrap gap-2">
-                {['Node.js', 'PostgreSQL', 'Express.js', 'Prisma'].map(skill => (
-                  <span key={skill} className="px-3 py-1 bg-gray-200 dark:bg-gray-800 rounded-full text-sm font-mono dark:text-white">{skill}</span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3">Metodologías</h4>
-              <div className="flex flex-wrap gap-2">
-                {['Scrum', 'Agile', 'Git Flow'].map(skill => (
-                  <span key={skill} className="px-3 py-1 bg-gray-200 dark:bg-gray-800 rounded-full text-sm font-mono dark:text-white">{skill}</span>
-                ))}
-              </div>
-            </div>
+          <h3 className="text-2xl font-mono font-bold mb-4 border-b-2 pb-2 dark:text-white">Tecnologías</h3>
+          <div className="flex flex-wrap gap-2">
+            {[
+              'React', 'Next.js', 'TypeScript', 'Node.js', 'PostgreSQL',
+              'Tailwind CSS', 'Prisma', 'Express.js', 'HTML5', 'CSS3'
+            ].map((skill, index) => (
+              <span
+                key={skill}
+                className={`px-3 py-1 rounded-full text-sm font-mono dark:text-white ${index < 2
+                  ? 'bg-emerald-100 dark:bg-emerald-900/40 border border-emerald-500/30'
+                  : 'bg-gray-200 dark:bg-gray-800'
+                  }`}
+              >
+                {skill}
+              </span>
+            ))}
           </div>
         </section>
 
@@ -225,10 +171,10 @@ export default function Curriculum() {
           </div>
         </section>
       </div>
-      
+
       <style jsx global>{`
         @media print {
-          @page { size: A4 portrait; margin: 10mm; }
+          @page { size: A4 portrait; margin: 8mm; }
           html, body, #__next, .cv-root {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -238,25 +184,40 @@ export default function Curriculum() {
           .dark & { background: #fff !important; }
           .dark .cv-root { background: #fff !important; }
           .dark .cv-root * { background-color: transparent !important; }
-          body, .cv-root { font-size: 11px !important; line-height: 1.25; }
-          .cv-root .p-8 { padding: 18px !important; }
-          section.p-8 { padding: 14px 18px !important; }
-          .cv-root h1 { font-size: 22pt !important; margin-bottom: 4px !important; }
-          .cv-root h2 { font-size: 12pt !important; margin-bottom: 6px !important; }
-          .cv-root h3 { font-size: 11pt !important; margin-bottom: 6px !important; }
-          .cv-root h4 { font-size: 10pt !important; margin-bottom: 2px !important; }
-          .cv-root p, .cv-root li, .cv-root span { font-size: 10pt !important; }
-          .cv-root ul { margin: 2px 0 6px 0 !important; }
-          .cv-root .mb-6 { margin-bottom: 10px !important; }
-          .cv-root .mt-2 { margin-top: 4px !important; }
-          .cv-root .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 10px !important; }
+          
+          body, .cv-root { font-size: 10px !important; line-height: 1.15; }
+          
+          /* Ajuste de contenedores principales */
+          .cv-root { padding: 0 !important; }
+          .cv-root .p-8 { padding: 10px 15px !important; }
+          section.p-8 { padding: 8px 15px !important; }
+          
+          /* Ajuste de encabezados */
+          .cv-root h1 { font-size: 18pt !important; margin-bottom: 2px !important; }
+          .cv-root h2 { font-size: 11pt !important; margin-bottom: 4px !important; }
+          .cv-root h3 { font-size: 10.5pt !important; margin-bottom: 4px !important; padding-bottom: 2px !important; }
+          .cv-root h4 { font-size: 9.5pt !important; margin-bottom: 1px !important; }
+          
+          /* Ajuste de textos y listas */
+          .cv-root p, .cv-root li, .cv-root span, .cv-root a { font-size: 9pt !important; }
+          .cv-root ul { margin: 1px 0 4px 0 !important; }
+          .cv-root .mb-6 { margin-bottom: 6px !important; }
+          .cv-root .mt-4 { margin-top: 4px !important; }
+          .cv-root .mt-2 { margin-top: 2px !important; }
+          .cv-root .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 6px !important; }
+          
           /* Badges más compactas */
-          .cv-root span.rounded-full { padding: 2px 6px !important; font-size: 9pt !important; }
+          .cv-root span.rounded-full { padding: 1px 5px !important; font-size: 8pt !important; }
+          
           /* Ocultar controles no necesarios */
           .print\\:hidden, .cv-root button, .cv-root [role="button"] { display: none !important; }
+          
           /* Forzar texto negro */
           h1, h2, h3, h4, h5, h6, p, span, li, td, th, a { color: #000 !important; -webkit-text-fill-color: #000 !important; }
           * { box-shadow: none !important; text-shadow: none !important; }
+          
+          /* Forzar no salto de página dentro de secciones */
+          section, div.mb-6 { page-break-inside: avoid; }
         }
       `}</style>
     </div>
